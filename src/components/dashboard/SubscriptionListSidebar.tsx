@@ -42,10 +42,10 @@ export function SubscriptionListSidebar({
   const inner = (
     <>
       <div className="flex items-center justify-between gap-2">
-        <p className="text-sm font-semibold uppercase tracking-wide text-slate-400">Lists</p>
+        <p className="text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">Lists</p>
         <button
           type="button"
-          className="rounded-lg p-1.5 text-slate-400 transition hover:bg-slate-800 hover:text-white md:hidden"
+          className="rounded-lg p-1.5 text-slate-500 transition hover:bg-slate-100 hover:text-slate-900 md:hidden dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white"
           onClick={onCloseMobile}
           aria-label="Close list panel"
         >
@@ -103,8 +103,8 @@ export function SubscriptionListSidebar({
         })}
       </nav>
 
-      <form onSubmit={handleAddList} className="mt-6 border-t border-slate-800/80 pt-4">
-        <label htmlFor="new-list-name" className="mb-2 block text-xs font-medium text-slate-400">
+      <form onSubmit={handleAddList} className="mt-6 border-t border-slate-300 pt-4 dark:border-slate-800/80">
+        <label htmlFor="new-list-name" className="mb-2 block text-xs font-medium text-slate-500 dark:text-slate-400">
           Custom list
         </label>
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
@@ -115,16 +115,16 @@ export function SubscriptionListSidebar({
             placeholder="e.g. Side projects"
             maxLength={64}
             autoComplete="off"
-            className="min-h-11 w-full min-w-0 flex-1 rounded-xl border border-slate-700 bg-slate-950/80 px-3 py-2 text-sm text-white placeholder:text-slate-600 focus:border-indigo-400 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+            className="min-h-11 w-full min-w-0 flex-1 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-500 focus:border-indigo-400 focus:outline-none focus:ring-1 focus:ring-indigo-500 dark:border-slate-700 dark:bg-slate-950/80 dark:text-white dark:placeholder:text-slate-600"
           />
           <button
             type="submit"
-            className="min-h-11 shrink-0 rounded-xl bg-indigo-500 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-offset-2 focus:ring-offset-slate-950"
+            className="min-h-11 shrink-0 rounded-xl bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-slate-950"
           >
             Add list
           </button>
         </div>
-        <p className="mt-2 text-xs text-slate-500">
+        <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
           Personal, Business, Family, and Other are always available.
         </p>
       </form>
@@ -134,7 +134,7 @@ export function SubscriptionListSidebar({
   return (
     <>
       <div
-        className={`fixed inset-0 z-40 bg-black/60 backdrop-blur-sm transition-opacity md:hidden ${
+        className={`fixed inset-0 z-40 bg-black/50 backdrop-blur-sm transition-opacity md:hidden ${
           mobileOpen ? "opacity-100" : "pointer-events-none opacity-0"
         }`}
         onClick={onCloseMobile}
@@ -147,7 +147,7 @@ export function SubscriptionListSidebar({
           mobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
         }`}
       >
-        <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-2xl border border-slate-800/90 bg-slate-900/50 shadow-xl md:sticky md:top-24 md:max-h-[calc(100vh-7rem)] md:shadow-none">
+        <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-2xl border border-slate-300 bg-white shadow-xl dark:border-slate-800/90 dark:bg-slate-900/50 md:sticky md:top-24 md:max-h-[calc(100vh-7rem)] md:shadow-none">
           <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain p-4">{inner}</div>
         </div>
       </aside>
@@ -169,12 +169,12 @@ function ListRowButton({ label, trailing, selected, onSelect }: ListRowButtonPro
       onClick={onSelect}
       className={`flex min-w-0 flex-1 items-center justify-between gap-2 rounded-xl px-3 py-2.5 text-left text-sm transition ${
         selected
-          ? "bg-indigo-500/15 font-medium text-indigo-50 ring-1 ring-inset ring-indigo-500/35"
-          : "text-slate-300 hover:bg-slate-800/80"
+          ? "bg-indigo-500/15 font-medium text-indigo-700 ring-1 ring-inset ring-indigo-500/35 dark:text-indigo-50"
+          : "text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800/80"
       }`}
     >
       <span className="truncate">{label}</span>
-      <span className="shrink-0 text-xs text-slate-500">{trailing}</span>
+      <span className="shrink-0 text-xs text-slate-500 dark:text-slate-400">{trailing}</span>
     </button>
   );
 }

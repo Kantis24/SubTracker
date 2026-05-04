@@ -1,54 +1,92 @@
-# SubTracker
+# SubTracker v2
 
-Manually track subscriptions by list—names, amounts, renewal cadence, and upcoming due dates—in a **local-first** React app. There is **no backend** and **no authentication**; everything stays in your browser via **localStorage**.
+SubTracker is a local-first subscription tracker built with React + TypeScript + Vite.  
+It runs fully in the browser, stores data in `localStorage`, and does **not** require auth, a backend, payment APIs, bank integrations, or cancellation integrations.
 
 ## Features
 
-- **Built-in lists** plus optional custom lists (custom lists can be deleted; subscriptions roll into **Other**).
-- **Subscriptions** with amount, billing cadence (weekly / monthly / yearly / custom days), next due date, notes, and active state.
-- **Dashboard** with estimated monthly/yearly spend (active items in the current filter), active counts, and dues in the next 30 days (+ overdue).
-- **Cross-tab sync**: data updates if you open the app in another window on the same browser profile.
-- **Empty states** for day-one use and for “no items in this list”.
+- Subscription CRUD with name, amount, billing cycle, next due date, notes, status, and list/category.
+- Search + filter by query, status, billing cycle, list/category, and upcoming due range.
+- Light/dark theme toggle with persisted preference.
+- Dashboard summary + simple responsive charts:
+  - monthly spending by list/category
+  - subscription count by billing cycle
+  - upcoming payments over 30 days
+- CSV export for all visible subscriptions.
+- Optional browser reminder notifications (no server required).
+- PWA support with offline install and cached assets.
+
+## Project structure
+
+```txt
+src/
+  components/
+    common/
+    dashboard/
+    subscription/
+    upcoming/
+  hooks/
+    useSubscriptionStore.ts
+    useTheme.ts
+    useReminders.ts
+  utils/
+    storage.ts
+    subscriptionFilters.ts
+    csv.ts
+    costCalculations.ts
+    upcoming.ts
+  data/
+    defaultLists.ts
+  pages/
+    Dashboard.tsx
+```
 
 ## Tech stack
 
-- React 19 + TypeScript
+- React 19
+- TypeScript
 - Vite 6
 - Tailwind CSS 3
+- Recharts
+- vite-plugin-pwa
 
-## Getting started
+## Setup
 
 ```bash
 npm install
 npm run dev
 ```
 
-Production build and preview:
+Build and preview:
 
 ```bash
 npm run build
 npm run preview
 ```
 
-### Data & privacy
+## PWA install notes
 
-Payloads are stored under the key `subtracker-v1` as JSON with a `schemaVersion` field (see `src/utils/storage.ts`). Clearing site data or switching browsers removes your entries—export/backup is listed as a future improvement below.
+- Open the app in a Chromium browser and use **Install app** in the address bar menu.
+- The app works offline for UI/assets; your subscription data stays in browser storage.
+
+## Data, privacy, and notifications
+
+- App data key: `subtracker-v1`
+- Theme key: `subtracker-theme`
+- Reminder keys: `subtracker-reminders`, `subtracker-reminder-log`
+- Notification permission is requested only when reminders are enabled.
 
 ## Screenshots
 
-_Add screenshots of the dashboard (desktop + mobile), the list sidebar, and the add/edit form._
+_Add desktop and mobile screenshots here for your portfolio README._
 
 ## Future improvements
 
-- Export / import JSON or CSV for backups
-- Optional reminders (requires more platform integration)
-- Lightweight PWA / offline install
-- Currency selection and formatting controls
-
-## Security
-
-This is a **static client-only** app—do not paste secrets into notes fields if you reuse the snippet elsewhere. Treat `localStorage` like any browser profile data.
+- JSON import/export
+- More chart presets and date windows
+- Optional recurring “mark as paid” helper
+- Better reminder scheduling when browser is not open
 
 ## License
 
-MIT — free to use and adapt in your own projects.
+MIT

@@ -1,22 +1,38 @@
 import { useMemo, useState } from "react";
-import type { Subscription, SubscriptionDraft } from "../types";
+import type { Subscription, SubscriptionDraft, SubscriptionFilterOptions } from "../types";
 import { EmptyState } from "../components/common/EmptyState";
+//import { ChartsSection } from "../components/dashboard/ChartsSection";
 import { DashboardHeader } from "../components/dashboard/DashboardHeader";
 import { DashboardSummary } from "../components/dashboard/DashboardSummary";
+import { FilterBar } from "../components/dashboard/FilterBar";
 import { SubscriptionListSidebar } from "../components/dashboard/SubscriptionListSidebar";
 import { SubscriptionCard } from "../components/subscription/SubscriptionCard";
 import { SubscriptionForm } from "../components/subscription/SubscriptionForm";
 import { UpcomingPayments } from "../components/upcoming/UpcomingPayments";
+import { useReminders } from "../hooks/useReminders";
 import { useSubscriptionStore } from "../hooks/useSubscriptionStore";
+import { useTheme } from "../hooks/useTheme";
+import { exportSubscriptionsCsv } from "../utils/csv";
+import { filterSubscriptions } from "../utils/subscriptionFilters";
 
 export default function Dashboard() {
   const { data, addSubscription, updateSubscription, deleteSubscription, addList, deleteList } =
     useSubscriptionStore();
 
+  const { theme, toggleTheme } = useTheme();
   const [selectedListId, setSelectedListId] = useState<string | "all">("all");
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [formOpen, setFormOpen] = useState(false);
   const [editing, setEditing] = useState<Subscription | null>(null);
+  const [filters, setFilters] = useState<SubscriptionFilterOptions>({
+    query: "",
+    listId: "all",
+    activity: "all",
+    billingCycle: "all",
+    dueRange: "all",
+  });
+
+  const reminders = useReminders(data.subscriptions);
 
   const listNameById = useMemo(() => {
     const map = new Map<string, string>();
@@ -25,9 +41,9 @@ export default function Dashboard() {
   }, [data.lists]);
 
   const filteredSubs = useMemo(() => {
-    if (selectedListId === "all") return data.subscriptions;
-    return data.subscriptions.filter((s) => s.listId === selectedListId);
-  }, [data.subscriptions, selectedListId]);
+    const nextFilters = { ...filters, listId: selectedListId };
+    return filterSubscriptions(data.subscriptions, nextFilters, listNameById);
+  }, [data.subscriptions, filters, listNameById, selectedListId]);
 
   const sortedSubs = useMemo(
     () =>
@@ -47,17 +63,22 @@ export default function Dashboard() {
     else addSubscription(draft);
   }
 
-  const defaultFormListId =
-    selectedListId === "all" ? data.lists[0]?.id ?? "personal" : selectedListId;
+  const defaultFormListId = selectedListId === "all" ? data.lists[0]?.id ?? "personal" : selectedListId;
+  const upcomingWindowDays =
+    filters.dueRange === "7" || filters.dueRange === "30" || filters.dueRange === "90"
+      ? Number(filters.dueRange)
+      : 30;
 
   const isGlobalEmpty = data.subscriptions.length === 0;
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100">
+    <div className="min-h-screen bg-slate-100 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
       <DashboardHeader
         mobileNavOpen={mobileNavOpen}
         onMenuClick={() => setMobileNavOpen((o) => !o)}
         onAddSubscription={openCreate}
+        theme={theme}
+        onToggleTheme={toggleTheme}
       />
 
       <div className="mx-auto flex max-w-[1600px] flex-col gap-6 px-4 pb-16 pt-6 sm:px-6 lg:flex-row lg:items-start lg:gap-8">
@@ -65,15 +86,28 @@ export default function Dashboard() {
           lists={data.lists}
           subscriptions={data.subscriptions}
           selectedListId={selectedListId}
-          onSelectList={setSelectedListId}
+          onSelectList={(id) => {
+            setSelectedListId(id);
+            setFilters((prev) => ({ ...prev, listId: id }));
+          }}
           onAddList={addList}
           onDeleteList={deleteList}
           mobileOpen={mobileNavOpen}
           onCloseMobile={() => setMobileNavOpen(false)}
         />
 
-        <div className="min-w-0 flex-1 space-y-8">
-          
+        <div className="min-w-0 flex-1 space-y-6">
+          <FilterBar
+            lists={data.lists}
+            filters={{ ...filters, listId: selectedListId }}
+            onChange={(next) => {
+              setFilters(next);
+              setSelectedListId(next.listId);
+            }}
+            onExportCsv={() => exportSubscriptionsCsv(data.subscriptions, listNameById)}
+          />
+
+        
 
           <DashboardSummary subscriptions={filteredSubs} />
 
@@ -96,8 +130,8 @@ export default function Dashboard() {
                 />
               ) : sortedSubs.length === 0 ? (
                 <EmptyState
-                  title="Nothing in this list"
-                  description="Pick another list in the sidebar, or add something new here with the right category."
+                  title="No subscriptions match these filters"
+                  description="Try clearing or adjusting search/filter settings, or add a new subscription."
                   action={{ label: "Add subscription", onClick: openCreate }}
                 />
               ) : (
@@ -122,9 +156,9 @@ export default function Dashboard() {
             {!isGlobalEmpty ? (
               <div className="w-full shrink-0 lg:w-[min(24rem,calc(100vw-6rem))]">
                 <UpcomingPayments
-                  subscriptions={data.subscriptions}
-                  listId={selectedListId}
-                  withinDays={30}
+                  subscriptions={filteredSubs}
+                  listId="all"
+                  withinDays={upcomingWindowDays}
                 />
               </div>
             ) : null}

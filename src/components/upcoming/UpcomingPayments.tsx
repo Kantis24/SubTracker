@@ -22,14 +22,14 @@ export function UpcomingPayments({ subscriptions, listId, withinDays = 30 }: Upc
 
   return (
     <section className="lg:sticky lg:top-24" aria-labelledby="upcoming-heading">
-      <div className="flex flex-wrap items-baseline justify-between gap-2 border-b border-slate-800/80 pb-3">
-        <h2 id="upcoming-heading" className="text-sm font-semibold uppercase tracking-wide text-slate-400">
+      <div className="flex flex-wrap items-baseline justify-between gap-2 border-b border-slate-300 pb-3 dark:border-slate-800/80">
+        <h2 id="upcoming-heading" className="text-sm font-semibold uppercase tracking-wide text-slate-600 dark:text-slate-400">
           Upcoming payments
         </h2>
-        <span className="text-xs text-slate-500">Next {withinDays} days (+ overdue)</span>
+        <span className="text-xs text-slate-500 dark:text-slate-400">Next {withinDays} days (+ overdue)</span>
       </div>
 
-      <div className="mt-4 rounded-2xl border border-slate-800/90 bg-slate-900/40 p-3 sm:p-4">
+      <div className="mt-4 rounded-2xl border border-slate-300 bg-white/80 p-3 dark:border-slate-800/90 dark:bg-slate-900/40 sm:p-4">
         {upcoming.length === 0 ? (
           <EmptyState
             title="You’re caught up here"
@@ -42,13 +42,13 @@ export function UpcomingPayments({ subscriptions, listId, withinDays = 30 }: Upc
               return (
                 <li
                   key={s.id}
-                  className="flex items-start justify-between gap-3 rounded-xl border border-slate-800/90 bg-slate-950/55 px-3 py-2.5"
+                  className="flex items-start justify-between gap-3 rounded-xl border border-slate-300 bg-white px-3 py-2.5 dark:border-slate-800/90 dark:bg-slate-950/55"
                 >
                   <div className="min-w-0">
-                    <p className="truncate font-medium text-slate-100">{s.name}</p>
-                    <p className="text-xs text-slate-500">
+                    <p className="truncate font-medium text-slate-900 dark:text-slate-100">{s.name}</p>
+                    <p className="text-xs text-slate-500 dark:text-slate-400">
                       {formatShortDate(s.nextDueDate)}
-                      <span className="mx-1 text-slate-600">•</span>
+                      <span className="mx-1 text-slate-400 dark:text-slate-600">•</span>
                       {billingCycleLabel(s.billingCycle)}
                     </p>
                     {late ? (
@@ -57,7 +57,7 @@ export function UpcomingPayments({ subscriptions, listId, withinDays = 30 }: Upc
                       </p>
                     ) : null}
                   </div>
-                  <span className="shrink-0 text-sm font-semibold tabular-nums text-white">
+                  <span className="shrink-0 text-sm font-semibold tabular-nums text-slate-900 dark:text-white">
                     {formatCurrency(s.amount)}
                   </span>
                 </li>

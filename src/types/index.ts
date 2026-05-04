@@ -1,4 +1,7 @@
 export type BillingCycle = "weekly" | "monthly" | "yearly" | "custom";
+export type ThemeMode = "light" | "dark";
+export type ActivityFilter = "all" | "active" | "inactive";
+export type DueRangeFilter = "all" | "overdue" | "7" | "30" | "90";
 
 export interface SubscriptionList {
   id: string;
@@ -41,4 +44,17 @@ export interface PersistedAppDocument {
   schemaVersion: number;
   lists: SubscriptionList[];
   subscriptions: Subscription[];
+}
+
+export interface SubscriptionFilterOptions {
+  query: string;
+  listId: string | "all";
+  activity: ActivityFilter;
+  billingCycle: BillingCycle | "all";
+  dueRange: DueRangeFilter;
+}
+
+export interface ReminderSettings {
+  enabled: boolean;
+  daysAhead: number;
 }
