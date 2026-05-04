@@ -38,6 +38,20 @@ npm run build
 npm run preview
 ```
 
+## Testing
+
+```bash
+npm run test
+npm run test:watch
+npm run test:coverage
+```
+
+Current unit tests cover:
+
+- `subscriptionFilters` (search and all filter paths)
+- `costCalculations` (monthly/yearly/custom math and inactive handling)
+- `csv` export utility (download flow and safe CSV escaping)
+
 ## PWA install notes
 
 - Open the app in a Chrome or Edge browser and use **Install app** in the address bar menu.
@@ -46,7 +60,6 @@ npm run preview
 
 ## Future improvements
 
-- 
 
 ## License
 
