@@ -33,7 +33,7 @@ export function DashboardHeader({
           </button>
           <div className="min-w-0">
             <h1 className="truncate text-lg font-semibold tracking-tight text-slate-900 dark:text-white sm:text-xl">
-              SubTracker v2
+              SubTracker
             </h1>
             <p className="truncate text-[11px] text-slate-500 dark:text-slate-400 sm:text-xs">
               Stored on this browser only • localStorage
