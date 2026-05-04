@@ -13,33 +13,7 @@ It runs fully in the browser, stores data in `localStorage`, and does **not** re
   - subscription count by billing cycle
   - upcoming payments over 30 days
 - CSV export for all visible subscriptions.
-- Optional browser reminder notifications (no server required).
 - PWA support with offline install and cached assets.
-
-## Project structure
-
-```txt
-src/
-  components/
-    common/
-    dashboard/
-    subscription/
-    upcoming/
-  hooks/
-    useSubscriptionStore.ts
-    useTheme.ts
-    useReminders.ts
-  utils/
-    storage.ts
-    subscriptionFilters.ts
-    csv.ts
-    costCalculations.ts
-    upcoming.ts
-  data/
-    defaultLists.ts
-  pages/
-    Dashboard.tsx
-```
 
 ## Tech stack
 
@@ -66,26 +40,13 @@ npm run preview
 
 ## PWA install notes
 
-- Open the app in a Chromium browser and use **Install app** in the address bar menu.
+- Open the app in a Chrome or Edge browser and use **Install app** in the address bar menu.
 - The app works offline for UI/assets; your subscription data stays in browser storage.
 
-## Data, privacy, and notifications
-
-- App data key: `subtracker-v1`
-- Theme key: `subtracker-theme`
-- Reminder keys: `subtracker-reminders`, `subtracker-reminder-log`
-- Notification permission is requested only when reminders are enabled.
-
-## Screenshots
-
-_Add desktop and mobile screenshots here for your portfolio README._
 
 ## Future improvements
 
-- JSON import/export
-- More chart presets and date windows
-- Optional recurring “mark as paid” helper
-- Better reminder scheduling when browser is not open
+- 
 
 ## License
 

@@ -9,7 +9,6 @@ import { SubscriptionListSidebar } from "../components/dashboard/SubscriptionLis
 import { SubscriptionCard } from "../components/subscription/SubscriptionCard";
 import { SubscriptionForm } from "../components/subscription/SubscriptionForm";
 import { UpcomingPayments } from "../components/upcoming/UpcomingPayments";
-import { useReminders } from "../hooks/useReminders";
 import { useSubscriptionStore } from "../hooks/useSubscriptionStore";
 import { useTheme } from "../hooks/useTheme";
 import { exportSubscriptionsCsv } from "../utils/csv";
@@ -32,7 +31,6 @@ export default function Dashboard() {
     dueRange: "all",
   });
 
-  const reminders = useReminders(data.subscriptions);
 
   const listNameById = useMemo(() => {
     const map = new Map<string, string>();
