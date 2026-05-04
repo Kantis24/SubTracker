@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import type {
   BillingCycle,
   DueRangeFilter,
@@ -10,6 +11,8 @@ interface FilterBarProps {
   filters: SubscriptionFilterOptions;
   onChange: (next: SubscriptionFilterOptions) => void;
   onExportCsv: () => void;
+  onExportJson: () => void;
+  onImportJson: (file: File) => void;
 }
 
 const CYCLE_OPTIONS: Array<BillingCycle | "all"> = [
@@ -21,7 +24,16 @@ const CYCLE_OPTIONS: Array<BillingCycle | "all"> = [
 ];
 const DUE_OPTIONS: DueRangeFilter[] = ["all", "overdue", "7", "30", "90"];
 
-export function FilterBar({ lists, filters, onChange, onExportCsv }: FilterBarProps) {
+export function FilterBar({
+  lists,
+  filters,
+  onChange,
+  onExportCsv,
+  onExportJson,
+  onImportJson,
+}: FilterBarProps) {
+  const importRef = useRef<HTMLInputElement>(null);
+
   return (
     <section
       className="rounded-2xl border border-slate-300 bg-white/90 p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900/55"
@@ -99,13 +111,40 @@ export function FilterBar({ lists, filters, onChange, onExportCsv }: FilterBarPr
 
       <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-500 dark:text-slate-400">
         <p>Filters apply to cards, summary, upcoming panel, and charts.</p>
-        <button
-          type="button"
-          onClick={onExportCsv}
-          className="rounded-lg border border-slate-300 px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-100 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
-        >
-          Export CSV
-        </button>
+        <div className="flex flex-wrap gap-2">
+          <button
+            type="button"
+            onClick={onExportCsv}
+            className="rounded-lg border border-slate-300 px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-100 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
+          >
+            Export CSV
+          </button>
+          <button
+            type="button"
+            onClick={onExportJson}
+            className="rounded-lg border border-slate-300 px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-100 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
+          >
+            Export JSON
+          </button>
+          <button
+            type="button"
+            onClick={() => importRef.current?.click()}
+            className="rounded-lg border border-slate-300 px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-100 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
+          >
+            Import JSON
+          </button>
+          <input
+            ref={importRef}
+            type="file"
+            accept="application/json,.json"
+            className="hidden"
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              if (file) onImportJson(file);
+              e.currentTarget.value = "";
+            }}
+          />
+        </div>
       </div>
     </section>
   );

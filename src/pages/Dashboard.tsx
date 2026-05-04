@@ -12,10 +12,19 @@ import { UpcomingPayments } from "../components/upcoming/UpcomingPayments";
 import { useSubscriptionStore } from "../hooks/useSubscriptionStore";
 import { useTheme } from "../hooks/useTheme";
 import { exportSubscriptionsCsv } from "../utils/csv";
+import { exportSubscriptionsJson, importSubscriptionsJson } from "../utils/jsonBackup";
 import { filterSubscriptions } from "../utils/subscriptionFilters";
 
 export default function Dashboard() {
-  const { data, addSubscription, updateSubscription, deleteSubscription, addList, deleteList } =
+  const {
+    data,
+    addSubscription,
+    updateSubscription,
+    deleteSubscription,
+    addList,
+    deleteList,
+    replaceData,
+  } =
     useSubscriptionStore();
 
   const { theme, toggleTheme } = useTheme();
@@ -61,6 +70,21 @@ export default function Dashboard() {
     else addSubscription(draft);
   }
 
+  async function handleImportJson(file: File) {
+    try {
+      const raw = await file.text();
+      const imported = importSubscriptionsJson(raw);
+      if (!imported) {
+        alert("Invalid SubTracker JSON file. Please choose a valid backup.");
+        return;
+      }
+      replaceData(imported);
+      alert("Backup imported successfully.");
+    } catch {
+      alert("Unable to read this file.");
+    }
+  }
+
   const defaultFormListId = selectedListId === "all" ? data.lists[0]?.id ?? "personal" : selectedListId;
   const upcomingWindowDays =
     filters.dueRange === "7" || filters.dueRange === "30" || filters.dueRange === "90"
@@ -103,6 +127,10 @@ export default function Dashboard() {
               setSelectedListId(next.listId);
             }}
             onExportCsv={() => exportSubscriptionsCsv(data.subscriptions, listNameById)}
+            onExportJson={() => exportSubscriptionsJson(data)}
+            onImportJson={(file) => {
+              void handleImportJson(file);
+            }}
           />
 
         

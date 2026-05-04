@@ -120,6 +120,13 @@ export function useSubscriptionStore() {
     [patch]
   );
 
+  const replaceData = useCallback(
+    (nextData: AppData) => {
+      patch(nextData);
+    },
+    [patch]
+  );
+
   return {
     data,
     addList,
@@ -127,5 +134,6 @@ export function useSubscriptionStore() {
     addSubscription,
     updateSubscription,
     deleteSubscription,
+    replaceData,
   };
 }

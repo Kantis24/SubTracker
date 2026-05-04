@@ -13,6 +13,7 @@ It runs fully in the browser, stores data in `localStorage`, and does **not** re
   - subscription count by billing cycle
   - upcoming payments over 30 days
 - CSV export for all visible subscriptions.
+- JSON backup import/export for moving data between browsers/devices.
 - PWA support with offline install and cached assets.
 
 ## Tech stack
@@ -51,6 +52,7 @@ Current unit tests cover:
 - `subscriptionFilters` (search and all filter paths)
 - `costCalculations` (monthly/yearly/custom math and inactive handling)
 - `csv` export utility (download flow and safe CSV escaping)
+- `jsonBackup` import validation behavior
 
 ## PWA install notes
 
